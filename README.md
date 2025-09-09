@@ -1,13 +1,13 @@
 # LoveSpouse-Vibration-Controller
 A Python-based Controller for LoveSpouse Toys on Windows
-##🎮 Vibration Controller
+#🎮 Vibration Controller
 
 A Windows-only Python application for controlling Bluetooth LE toys.
 It provides both a modern GUI (Tkinter + Discord-like theme) and a local HTTP API for programmatic control.
 
 Designed for users who want to integrate custom vibration patterns or trigger devices from games, scripts, or other automation tools.
 
-##✨ Features
+#✨ Features
 
 Intensity Control
 Adjustable vibration strength (0–9) via a GUI slider with real-time feedback.
@@ -28,14 +28,14 @@ Custom Tkinter theme inspired by Discord’s dark palette.
 Fail-Safe Stop
 One-click STOP button and automatic “level 0” command dispatch to safely terminate vibrations.
 
-##📂 Repository Structure
+#📂 Repository Structure
 .
 ├── main.py              # Core application
 ├── pattern/             # User-defined vibration patterns (.vibepattern)
 ├── icon.ico             # Optional GUI icon
 └── README.md            # This file
 
-##📦 Requirements
+#📦 Requirements
 
 OS: Windows 10+ (required due to winsdk)
 
@@ -48,7 +48,7 @@ pip install winsdk
 
 Note: winsdk provides access to the Windows Runtime APIs for Bluetooth LE advertising.
 
-##▶️ Usage
+#▶️ Usage
 
 Run:
 
@@ -61,7 +61,7 @@ Launch the Tkinter GUI window (🎮 Vibration Controller).
 
 Start an HTTP server listening on port 4545.
 
-##🎵 Pattern File Format
+#🎵 Pattern File Format
 
 Pattern files are stored in pattern/ with extension .vibepattern.
 
@@ -85,10 +85,10 @@ This defines a repeating sequence of strength/duration pairs.
 Base URL: http://localhost:4545
 
 Example Requests
-# Level 3, 1.5 seconds
+## Level 3, 1.5 seconds
 curl http://localhost:4545/API/3-1.5s
 
-# Level 9, 500 milliseconds
+## Level 9, 500 milliseconds
 curl http://localhost:4545/API/9-500ms
 
 Response
@@ -101,7 +101,7 @@ Response
 
 If no valid API call is provided, the server responds with usage instructions.
 
-##🖼️ GUI Preview
+#🖼️ GUI Preview
 
 (Insert screenshot here, e.g. assets/gui.png)
 
@@ -111,7 +111,7 @@ Right: Pattern list with double-click or Enter to start playback.
 
 Bottom: Status indicator (Ready, Running, Stopped, Playing Pattern).
 
-##⚠️ Disclaimer
+#⚠️ Disclaimer
 
 This software is provided for educational and experimental purposes only.
 The author(s) take no responsibility for any misuse, damages, or consequences arising from its use.
