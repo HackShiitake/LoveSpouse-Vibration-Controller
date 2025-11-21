@@ -1,0 +1,5 @@
+# DamageCurl default config
+url: "http://localhost:4545/API/"
+power: 9
+time: 0.4
+players: {}
