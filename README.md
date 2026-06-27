@@ -1,120 +1,150 @@
-# 🎮 Vibration Controller
+# LoveSpouse Vibration Controller
 
-A Windows-only Python application for controlling Bluetooth LE toys.
-It provides both a modern GUI (Tkinter + Discord-like theme) and a local HTTP API for programmatic control.
-Designed for users who want to integrate custom vibration patterns or trigger devices from games, scripts, or other automation tools.
+Windows BLE vibration controller with a desktop GUI, local HTTP API, pattern playback, and an optional Paper plugin that can trigger pulses from Minecraft damage events.
 
-## ✨ Features
+This repository has been reorganized into a production-style project:
 
-### Intensity Control
-Adjustable vibration strength (0–9) via a GUI slider with real-time feedback.
+- Python application code lives under `src/lovespouse_controller/`.
+- Bluetooth commands are serialized through a dedicated worker thread.
+- Continuous playback, pattern playback, HTTP serving, GUI, configuration, and parsing are separated by responsibility.
+- The Paper plugin is split into command, config, HTTP client, and listener packages.
+- Basic parser/repository tests live under `tests/`.
 
-### Pattern Playback
-Supports `.vibepattern` files (JSON header + sequence), enabling user-defined vibration scripts.
+## Repository Layout
 
-### HTTP API
-Local server on `http://localhost:4545` for issuing commands from external applications.
-
-**Example:**
-```
-GET /API/{strength}-{duration}{unit}
-```
-
-### Modern UI
-Custom Tkinter theme inspired by Discord's dark palette.
-
-### Fail-Safe Stop
-One-click STOP button and automatic "level 0" command dispatch to safely terminate vibrations.
-
-## 📂 Repository Structure
-
-```
+```text
 .
-├── main.py              # Core application
-├── pattern/             # User-defined vibration patterns (.vibepattern)
-├── icon.ico             # Optional GUI icon
-└── README.md            # This file
+├── main.py
+├── pyproject.toml
+├── pattern/
+├── src/
+│   └── lovespouse_controller/
+│       ├── api.py
+│       ├── app.py
+│       ├── bluetooth.py
+│       ├── config.py
+│       ├── gui.py
+│       ├── models.py
+│       ├── patterns.py
+│       ├── playback.py
+│       └── worker.py
+├── tests/
+└── DamageCurl/
+    └── src/main/java/com/lovespouse/damagecurl/
+        ├── command/
+        ├── config/
+        ├── http/
+        └── listener/
 ```
 
-## 📦 Requirements
+## Requirements
 
-- **OS:** Windows 10+ (required due to winsdk)
-- **Python:** 3.9 or newer
-- **Dependencies:**
-  ```bash
-  pip install winsdk
-  ```
+- Windows 10 or newer
+- Python 3.9+
+- `winsdk` for real Bluetooth LE advertising
+- Java 17 and Maven for building the Paper plugin
 
-**Note:** `winsdk` provides access to the Windows Runtime APIs for Bluetooth LE advertising.
+Install the Python dependency:
 
-## ▶️ Usage
+```bash
+pip install winsdk
+```
 
-Run:
+## Run The Controller
+
+Normal hardware mode:
+
 ```bash
 python main.py
 ```
 
-This will:
-- Launch the Tkinter GUI window (🎮 Vibration Controller).
-- Start an HTTP server listening on port 4545.
+Dry run mode for development without Bluetooth hardware:
 
-## 🎵 Pattern File Format
-
-Pattern files are stored in `pattern/` with extension `.vibepattern`.
-
-- **First line:** JSON header (name, author).
-- **Subsequent lines:** `<strength>-<duration><unit>`.
-
-### Example (`WAVE.vibepattern`):
-```json
-{"name": "WAVE Vibe", "author": "Miran"}
-9-500ms
-3-1s
-7-200ms
+```bash
+python main.py --dry-run
 ```
 
-This defines a repeating sequence of strength/duration pairs.
+Useful options:
 
-## 🌐 API Reference
-
-**Base URL:** `http://localhost:4545`
-
-### Example Requests
-
-**Level 3, 1.5 seconds**
 ```bash
+python main.py --host 127.0.0.1 --port 4545 --pattern-dir pattern --log-level INFO
+```
+
+## HTTP API
+
+The local API keeps the original endpoint format:
+
+```text
+GET /API/{strength}-{duration}{unit}
+```
+
+Examples:
+
+```bash
+curl http://localhost:4545/API/5-1000ms
 curl http://localhost:4545/API/3-1.5s
+curl http://localhost:4545/API/0-100ms
 ```
 
-**Level 9, 500 milliseconds**
-```bash
-curl http://localhost:4545/API/9-500ms
-```
+Response:
 
-### Response
 ```json
 {
   "status": "ok",
-  "strength": 3,
-  "duration": "1.5s"
+  "strength": 5,
+  "duration": "1000ms"
 }
 ```
 
-If no valid API call is provided, the server responds with usage instructions.
+## Pattern Files
 
-## 🖼️ GUI Preview
+Pattern files live in `pattern/` and use the `.vibepattern` extension.
 
-*(Insert screenshot here, e.g. assets/gui.png)*
+```text
+{"name": "Pulse Wave", "author": "Developer"}
+3-500ms
+0-250ms
+5-750ms
+0-500ms
+7-1s
+```
 
-- **Left:** Intensity slider + STOP button.
-- **Right:** Pattern list with double-click or Enter to start playback.
-- **Bottom:** Status indicator (Ready, Running, Stopped, Playing Pattern).
+## Tests
 
-## ⚠️ Disclaimer
+Run Python tests from the repository root:
 
-This software is provided for educational and experimental purposes only.
-The author(s) take no responsibility for any misuse, damages, or consequences arising from its use.
+```powershell
+$env:PYTHONPATH = "src"
+python -m unittest discover -s tests
+```
 
----
+## Build The Paper Plugin
 
-💡 **Tip:** Combining the HTTP API with a game, MIDI controller, or automation script allows for fully synchronized interactive experiences.
+```bash
+cd DamageCurl
+mvn package
+```
+
+The plugin configuration is:
+
+```yaml
+server:
+  url: "http://localhost:4545/API/"
+  power: 9
+  time: 0.4
+players: {}
+```
+
+Commands:
+
+```text
+/damagecurl player <player> <true|false>
+/damagecurl url <url>
+/damagecurl power <1-9>
+/damagecurl time <seconds>
+/damagecurl status
+```
+
+## Safety Notes
+
+Use the STOP button or send strength `0` through the API to stop output. The app also sends a stop command during shutdown and when playback modes are changed.

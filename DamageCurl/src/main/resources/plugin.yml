@@ -1,9 +1,9 @@
 name: DamageCurl
-main: com.example.DamageCurl
-version: 1.0
+main: com.lovespouse.damagecurl.DamageCurlPlugin
+version: 2.0.0
 api-version: 1.20
 commands:
   damagecurl:
     description: Manage damage curl plugin settings
-    usage: /damagecurl <player/url/power/time> ...
+    usage: /damagecurl <player|url|power|time|status> ...
     aliases: [dc]
