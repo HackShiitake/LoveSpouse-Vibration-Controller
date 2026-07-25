@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+build/
+dist/
+*.spec
+*.egg-info/
+.venv/
+
+# PyInstaller / transmitter build output (large binary, build it locally)
+lovespouse-ble.exe
+DamageBuzz/src/main/resources/assets/damagebuzz/lovespouse-ble.exe
+
+# Gradle / Forge (DamageBuzz mod)
+DamageBuzz/.gradle/
+DamageBuzz/build/
+DamageBuzz/run/
+DamageBuzz/eclipse/
+DamageBuzz/.idea/
+DamageBuzz/*.iml
+
+# OS / editor
+.DS_Store
+*.swp

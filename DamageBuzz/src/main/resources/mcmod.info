@@ -1,0 +1,15 @@
+[
+  {
+    "modid": "damagebuzz",
+    "name": "DamageBuzz",
+    "description": "Sends a Bluetooth LE vibration whenever the player takes damage. Strength can be fixed or scaled to the damage taken. The BLE transmitter is launched automatically, so no separate app is required.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "authorList": ["HackShiitake"],
+    "credits": "Built on the LoveSpouse Vibration Controller BLE backend.",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

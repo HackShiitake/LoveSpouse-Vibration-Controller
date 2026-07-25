@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lovespouse-vibration-controller"
-version = "2.0.0"
+version = "2.1.0"
 description = "Desktop GUI and local HTTP API for Bluetooth LE vibration control."
 requires-python = ">=3.9"
 dependencies = [

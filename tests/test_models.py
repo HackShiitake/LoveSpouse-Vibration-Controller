@@ -18,6 +18,13 @@ class VibrationCommandTests(unittest.TestCase):
         self.assertEqual(command.duration_seconds, 1.5)
         self.assertEqual(command.original_duration, "1.5s")
 
+    def test_parse_minute_command(self):
+        command = VibrationCommand.parse("0-10m")
+
+        self.assertEqual(command.strength, 0)
+        self.assertEqual(command.duration_seconds, 600.0)
+        self.assertEqual(command.original_duration, "10m")
+
     def test_strength_is_clamped(self):
         command = VibrationCommand.parse("99-1s")
 

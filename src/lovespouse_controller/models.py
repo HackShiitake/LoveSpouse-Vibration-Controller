@@ -5,7 +5,9 @@ from dataclasses import dataclass
 from typing import Iterable, Tuple
 
 
-COMMAND_PATTERN = re.compile(r"^(?P<strength>\d+)-(?P<duration>\d+(?:\.\d+)?)(?P<unit>ms|s)$")
+COMMAND_PATTERN = re.compile(r"^(?P<strength>\d+)-(?P<duration>\d+(?:\.\d+)?)(?P<unit>ms|s|m|h)$")
+
+_UNIT_SECONDS = {"ms": 0.001, "s": 1.0, "m": 60.0, "h": 3600.0}
 
 
 @dataclass(frozen=True)
@@ -29,7 +31,7 @@ class VibrationCommand:
 
         value = float(match.group("duration"))
         unit = match.group("unit")
-        seconds = value / 1000.0 if unit == "ms" else value
+        seconds = value * _UNIT_SECONDS[unit]
         return cls(
             strength=int(match.group("strength")),
             duration_seconds=seconds,

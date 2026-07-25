@@ -1,0 +1,48 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url = "https://maven.minecraftforge.net" }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+version = "1.0.0"
+group = "com.lovespouse.damagebuzz"
+archivesBaseName = "damagebuzz"
+
+// Minecraft 1.12.2 runs on Java 8.
+sourceCompatibility = targetCompatibility = '1.8'
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
+
+minecraft {
+    version = "1.12.2-14.23.5.2860"
+    runDir = "run"
+    // Stable MCP mappings for 1.12.2.
+    mappings = "stable_39"
+}
+
+dependencies {
+    // No runtime dependencies: the mod talks to the BLE transmitter over plain
+    // HTTP using only java.net + the Forge/Minecraft classpath.
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // Expand ${version}/${mcversion} inside mcmod.info.
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
+    // Copy everything else verbatim (including the optional bundled transmitter).
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}

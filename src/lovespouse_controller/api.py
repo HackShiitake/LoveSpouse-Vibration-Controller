@@ -12,7 +12,7 @@ from .models import VibrationCommand
 from .playback import PlaybackService
 
 LOGGER = logging.getLogger(__name__)
-API_PATH_PATTERN = re.compile(r"^/API/(?P<command>\d+-\d+(?:\.\d+)?(?:ms|s))$")
+API_PATH_PATTERN = re.compile(r"^/API/(?P<command>\d+-\d+(?:\.\d+)?(?:ms|s|m|h))$")
 
 
 class ApiServer:
