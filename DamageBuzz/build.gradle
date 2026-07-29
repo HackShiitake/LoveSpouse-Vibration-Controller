@@ -1,7 +1,8 @@
 buildscript {
     repositories {
-        jcenter()
         maven { url = "https://maven.minecraftforge.net" }
+        mavenCentral()
+        gradlePluginPortal()
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
@@ -21,7 +22,9 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.2-14.23.5.2860"
+    // 14.23.5.2847 publishes the plain "userdev" artifact ForgeGradle 2.3 asks
+    // for; the built mod still runs on any 1.12.2 Forge 14.23.5.x.
+    version = "1.12.2-14.23.5.2847"
     runDir = "run"
     // Stable MCP mappings for 1.12.2.
     mappings = "stable_39"

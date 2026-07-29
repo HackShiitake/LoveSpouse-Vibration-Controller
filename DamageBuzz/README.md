@@ -58,12 +58,20 @@ SCALED mapping with the defaults: a half-heart hit ≈ strength 2, ~3 hearts ≈
 
 ## Build
 
+Needs a **JDK 8** (not just a JRE, and not JDK 9+ — ForgeGradle 2.3 requires 8).
+The bundled Gradle wrapper pins Gradle 4.10.3, so you don't need Gradle installed.
+
 ```bash
 cd DamageBuzz
-./gradlew build          # first run downloads Forge; needs Java 8
+# point JAVA_HOME at a JDK 8, then:
+./gradlew setupDecompWorkspace build      # first run downloads Forge + decompiles MC (~4 min)
 ```
 
-Output: `build/libs/damagebuzz-1.0.0.jar`.
+Output: **`build/libs/damagebuzz-1.0.0.jar`** — drop it in `.minecraft/mods/`.
+It builds against Forge 1.12.2-14.23.5.2847 and runs on any 1.12.2 Forge
+14.23.5.x. This has been built and verified: the jar contains the FML `@Mod`
+annotation cache and its Minecraft references are reobfuscated to SRG names, so
+it loads in a normal (production) client.
 
 ### Bundling the transmitter (optional, for a single-file distribution)
 
